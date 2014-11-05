@@ -1,0 +1,9 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "main": "./spawn/parent.js",
+  "devDependencies": {
+    "should": "^4.1.0",
+    "underscore": "^1.7.0"
+  }
+}
