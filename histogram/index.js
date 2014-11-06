@@ -4,10 +4,10 @@
 var _ = require('underscore');
 
 
-function Histogram() {
+module.exports = function Histogram() {
 
     const MODE_CONFIGURATION = 0;
-    const MODE_RUNTIME = 1;
+    //const MODE_RUNTIME = 1;
 
     this.bounds = [];
     this.mode = MODE_CONFIGURATION;
@@ -25,87 +25,70 @@ function Histogram() {
             if (!i) {
                 ranges.push({name: '< ' + bound, lo: undefined, hi: bound});
             }
-            if (i == sortedBounds.length-1) {
-                ranges.push({name: bound + ' >', lo: bound, hi: undefined});
-            }else{
+            if(i){
                 var prevBound = sortedBounds[i-1];
                 ranges.push({name: prevBound+' - '+bound, lo: prevBound, hi: bound});
+            }
+            if (i == sortedBounds.length-1) {
+                ranges.push({name: bound + ' >', lo: bound, hi: undefined});
             }
         }
         _ranges = ranges;
 
-    }
+    };
 
+    this.getRanges = function(){
+        return _ranges;
+    };
 
-}
+    /**
+     * Specify the histogram has no bounds added
+     * @returns {boolean}
+     */
+    this.isEmpty = function(){
+        return !this.bounds.length;
+    };
 
-/**
- * Specify the histogram has no bounds added
- * @returns {boolean}
- */
-Histogram.prototype.isEmpty = function () {
-    return !this.bounds.length;
-};
+    /**
+     * Specify whether histogram in configuration mode
+     * @returns {boolean}
+     */
+    this.configurationMode = function () {
+        return this.mode == MODE_CONFIGURATION;
+    };
 
-/**
- * Specify whether histogram in configuration mode
- * @returns {boolean}
- */
-Histogram.prototype.configurationMode = function () {
-    return this.mode == MODE_CONFIGURATION;
-};
+    /**
+     * Specify whether histogram in runtime mode
+     * @returns {boolean}
+     */
+    this.runtimeMode = function () {
+        return false;
+    };
 
-/**
- * Specify whether histogram in runtime mode
- * @returns {boolean}
- */
-Histogram.prototype.runtimeMode = function () {
-    return false;
-};
-
-/**
- * Add new bound during configuration mode, providing the value
- * @param name
- * @param value
- */
-Histogram.prototype.addBound = function (value) {
-    if (this.runtimeMode()) {
-        throw new Error('Can not add new bound in runtime mode');
-    }
-    this.bounds.push(value);
-    return this;
-};
-
-Histogram.prototype.start = function () {
-    if (this.isEmpty()) {
-        throw new Error('Could not start because no bounds are defined');
-    }
-};
-
-function calculateRanges(histogram){
-
-}
-
-Histogram.prototype.finish = function () {
-
-};
-
-Histogram.prototype.getRanges = function () {
-    var sortedBounds = _.sortBy(this.bounds);
-    var ranges = [];
-    for (var i = 0; i < sortedBounds.length; i++) {
-        var bound = sortedBounds[i];
-        if (!i) {
-            ranges.push({name: '< ' + bound, lo: undefined, hi: bound});
+    /**
+     * Add new bound during configuration mode, providing the value
+     * @param value
+     */
+    this.addBound = function (value) {
+        if (this.runtimeMode()) {
+            throw new Error('Can not add new bound in runtime mode');
         }
-        if (i == sortedBounds.length-1) {
-            ranges.push({name: bound + ' >', lo: bound, hi: undefined});
-        }else{
-            var prevBound = sortedBounds[i-1];
-            ranges.push({name: prevBound+' - '+bound, lo: prevBound, hi: bound});
-        }
-    }
-    this.ranges = ranges;
-};
+        this.bounds.push(value);
+        _recalculateRanges.call(this);
+        return this;
+    };
 
-module.exports = Histogram;
+    this.start = function () {
+        if (this.isEmpty()) {
+            throw new Error('Could not start because no bounds are defined');
+        }
+    };
+
+    /**
+     *
+     */
+    this.finish = function () {
+
+    };
+
+};

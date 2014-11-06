@@ -32,9 +32,9 @@ setInterval(function() {
         //timer.stop(true);
     }
 
-},1);
+},10);
 
 setInterval(function(){
     console.log('outs',outs);
     console.log('tm',tm);
-},100)
+},100);

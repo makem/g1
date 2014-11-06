@@ -4,6 +4,7 @@
   "main": "./spawn/parent.js",
   "devDependencies": {
     "should": "^4.1.0",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "chai": "^1.9.2"
   }
 }
