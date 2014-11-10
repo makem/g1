@@ -84,6 +84,14 @@ module.exports = function Histogram() {
         }
     };
 
+    this.clone = function(){
+      var clone = new Histogram();
+        _.each(this.bounds,function(b){
+           clone.addBound(b);
+        });
+        return clone;
+    };
+
     /**
      *
      */

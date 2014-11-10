@@ -49,7 +49,7 @@ describe ('Histogram', function () {
       var clone = histogram.clone ();
       clone.should.be.an.instanceOf (Histogram);
       clone.should.be.ok;
-      clone.ranges ().should.be.equal (histogram.ranges ());
+      clone.getRanges ().should.be.eql (histogram.getRanges ());
     })
   });
 
